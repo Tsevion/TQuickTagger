@@ -58,6 +58,15 @@ layout_mode = 2
 tooltip_text = "Files/Preview"
 text = "F/P"
 
+[node name="ShowSelectedToggle" type="CheckButton" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Only Show Selected"
+text = "SS:"
+
+[node name="SelectedCounter" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "0/0"
+
 [node name="SelectNone" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "None
@@ -224,6 +233,7 @@ layout_mode = 2
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/SaveButton" to="." method="save"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/SwapView" to="." method="_on_swap_view_pressed"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/ShowSelectedToggle" to="." method="_on_show_selected_toggle_toggled"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/SelectNone" to="." method="clear_selection"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/SelectAll" to="." method="select_all"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/PreviewSize" to="." method="_on_preview_size_value_changed"]
@@ -232,4 +242,6 @@ layout_mode = 2
 [connection signal="pressed" from="VBoxContainer/HSplitContainer/TabContainer/ImageView/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HSplitContainer/TabContainer/ImageView/FwButton" to="." method="_on_fw_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HSplitContainer/ScrollContainer2/MarginContainer/VBoxContainer/HBoxNewPriorityTag/NewPriorityTagButton" to="." method="_on_new_priority_tag_button_pressed"]
+[connection signal="text_submitted" from="VBoxContainer/HSplitContainer/ScrollContainer2/MarginContainer/VBoxContainer/HBoxNewPriorityTag/NewPriorityTagName" to="." method="_on_new_priority_tag_name_text_submitted"]
 [connection signal="pressed" from="VBoxContainer/HSplitContainer/ScrollContainer2/MarginContainer/VBoxContainer/HBoxNewTag/NewTagButton" to="." method="_on_new_tag_button_pressed"]
+[connection signal="text_submitted" from="VBoxContainer/HSplitContainer/ScrollContainer2/MarginContainer/VBoxContainer/HBoxNewTag/NewTagName" to="." method="_on_new_tag_name_text_submitted"]

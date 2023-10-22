@@ -12,6 +12,8 @@ class_name ImageBlock extends PanelContainer
 			$VBoxContainer/TextureRect/Selected.button_pressed = sel
 			set_style()
 			if selection_parent:
+				if selection_parent.show_only_selected:
+					visible = selected
 				if selected:
 					selection_parent.add_to_selection(self)
 				else:

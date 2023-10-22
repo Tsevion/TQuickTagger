@@ -10,7 +10,7 @@ var p_size : HSlider
 var image_buttons := []
 var selected := []
 var tags_need_recalc := false
-var preview_idx = -1
+var previewing = null
 var special_tags : Array[String] = Array([], TYPE_STRING, &"", null)
 var special_file : String
 var needs_save : bool :
@@ -18,7 +18,7 @@ var needs_save : bool :
 		if ns != needs_save:
 			needs_save = ns
 			$VBoxContainer/HBoxContainer/SaveButton.disabled = !needs_save
-		
+var show_only_selected: bool
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -87,6 +87,8 @@ func make_special_tag_buttons():
 
 func recalculate_current_tags():
 	tags_need_recalc = false
+	
+	$VBoxContainer/HBoxContainer/SelectedCounter.text = "%d/%d" % [len(selected), len(image_buttons)]
 	
 	var stl = $VBoxContainer/HSplitContainer/ScrollContainer2/MarginContainer/VBoxContainer/PriorityTagContainer/PriorityTagList
 	var tl = $VBoxContainer/HSplitContainer/ScrollContainer2/MarginContainer/VBoxContainer/FileTagContainer/FileTagList
@@ -166,6 +168,20 @@ func save():
 		Tags.save_tags(imb.tag_file_name, imb.tags, special_tags)
 	needs_save = false
 
+func show_only_selected_change(new_val : bool):
+	if new_val == show_only_selected:
+		return
+	
+	show_only_selected = new_val
+	for imb in image_buttons:
+		if show_only_selected:
+			imb.visible = imb.selected
+		else:
+			imb.visible = true
+
+func in_preview() -> bool:
+	return $VBoxContainer/HSplitContainer/TabContainer.current_tab == 1
+
 func _on_choose_dir_pressed():
 	if not check_save(_on_choose_dir_pressed):
 		return
@@ -198,11 +214,15 @@ func _on_preview_size_value_changed(value):
 	for ib in image_buttons:
 		ib.set_image_size(value)
 
-func preview_image(imblock : ImageBlock):
+func preview_image(imblock):
 	$VBoxContainer/HSplitContainer/TabContainer.current_tab = 1
-	$VBoxContainer/HSplitContainer/TabContainer/ImageView.texture = imblock.texture
-	preview_idx = image_buttons.find(imblock)
-	set_selection(imblock)
+	if imblock:
+		$VBoxContainer/HSplitContainer/TabContainer/ImageView.texture = imblock.texture
+	else:
+		$VBoxContainer/HSplitContainer/TabContainer/ImageView.texture = null
+	previewing = imblock
+	if not show_only_selected:
+		set_selection(previewing)
 
 func add_to_selection(imblock : ImageBlock):
 	if imblock not in selected:
@@ -229,10 +249,34 @@ func select_all():
 		imb.selected = true
 
 func _on_fw_button_pressed():
-	preview_image(image_buttons[(preview_idx + 1) % len(image_buttons)])
+	if show_only_selected:
+		if len(selected) == 0:
+			preview_image(null)
+		else:
+			var preview_idx = selected.find(previewing)
+			preview_image(selected[(preview_idx + 1) % len(selected)])
+	else:
+		if len(image_buttons) == 0:
+			preview_image(null)
+		else:
+			var preview_idx = image_buttons.find(previewing)
+			preview_image(image_buttons[(preview_idx + 1) % len(image_buttons)])
 
 func _on_back_button_pressed():
-	preview_image(image_buttons[preview_idx - 1])
+	if show_only_selected:
+		if len(selected) == 0:
+			preview_image(null)
+		else:
+			# abs here is a dumb trick, so if it finds nothing and returns -1, it just goes to element 0
+			var preview_idx = abs(selected.find(previewing))
+			preview_image(selected[preview_idx - 1])
+	else:
+		if len(image_buttons) == 0:
+			preview_image(null)
+		else:
+			# abs here is a dumb trick, so if it finds nothing and returns -1, it just goes to element 0
+			var preview_idx = abs(image_buttons.find(previewing))
+			preview_image(image_buttons[preview_idx - 1])
 
 func _on_image_view_gui_input(event):
 	if event is InputEventMouseButton:
@@ -241,11 +285,21 @@ func _on_image_view_gui_input(event):
 
 func _on_new_priority_tag_button_pressed():
 	var nt = $VBoxContainer/HSplitContainer/ScrollContainer2/MarginContainer/VBoxContainer/HBoxNewPriorityTag/NewPriorityTagName.text.strip_edges()
-	if nt not in special_tags:
-		special_tags.append(nt)
-		special_tags.sort()
-		make_special_tag_buttons()
+	_on_new_priority_tag_name_text_submitted(nt)
 
 func _on_new_tag_button_pressed():
 	var nt = $VBoxContainer/HSplitContainer/ScrollContainer2/MarginContainer/VBoxContainer/HBoxNewTag/NewTagName.text.strip_edges()
 	add_tag(nt)
+
+func _on_new_priority_tag_name_text_submitted(new_text):
+	if new_text not in special_tags:
+		special_tags.append(new_text)
+		special_tags.sort()
+		make_special_tag_buttons()
+		needs_save = true
+
+func _on_new_tag_name_text_submitted(new_text):
+	add_tag(new_text)
+
+func _on_show_selected_toggle_toggled(button_pressed):
+	show_only_selected_change(button_pressed)

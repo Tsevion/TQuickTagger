@@ -1,0 +1,132 @@
+[gd_scene load_steps=11 format=3 uid="uid://bjgyuj3fdh88e"]
+
+[ext_resource type="Script" path="res://tag_button.gd" id="1_2udt8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_srkoo"]
+content_margin_left = 7.0
+content_margin_top = 2.0
+content_margin_right = 7.0
+content_margin_bottom = 2.0
+bg_color = Color(0.168627, 0.231373, 0.301961, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k7tep"]
+content_margin_left = 7.0
+content_margin_top = 2.0
+content_margin_right = 7.0
+content_margin_bottom = 2.0
+bg_color = Color(0.0627451, 0.333333, 0.0980392, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y7tsj"]
+content_margin_left = 7.0
+content_margin_top = 2.0
+content_margin_right = 7.0
+content_margin_bottom = 2.0
+bg_color = Color(0.168627, 0.231373, 0.301961, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_blend = true
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n2w7w"]
+content_margin_left = 7.0
+content_margin_top = 2.0
+content_margin_right = 7.0
+content_margin_bottom = 2.0
+bg_color = Color(0.0608847, 0.332447, 0.0989834, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_blend = true
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="FontVariation" id="FontVariation_ia0y1"]
+spacing_top = -12
+spacing_bottom = -8
+
+[sub_resource type="FontVariation" id="FontVariation_ui2mp"]
+spacing_top = -10
+spacing_bottom = -10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ei4xy"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ohvli"]
+font_size = 14
+
+[sub_resource type="LabelSettings" id="LabelSettings_dpmhq"]
+font_size = 14
+
+[node name="TagButton" type="PanelContainer"]
+offset_right = 127.0
+offset_bottom = 27.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_srkoo")
+script = ExtResource("1_2udt8")
+base_style = SubResource("StyleBoxFlat_srkoo")
+special_style = SubResource("StyleBoxFlat_k7tep")
+focused_style = SubResource("StyleBoxFlat_y7tsj")
+special_focused_style = SubResource("StyleBoxFlat_n2w7w")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 3
+
+[node name="RemoveTag" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = SubResource("FontVariation_ia0y1")
+theme_override_font_sizes/font_size = 24
+text = "-"
+
+[node name="AddTag" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = SubResource("FontVariation_ui2mp")
+theme_override_font_sizes/font_size = 24
+text = "+"
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_ei4xy")
+
+[node name="TagName" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Tag"
+label_settings = SubResource("LabelSettings_ohvli")
+
+[node name="TagCount" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "(10)"
+label_settings = SubResource("LabelSettings_dpmhq")
+
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_focus_exited"]
+[connection signal="pressed" from="HBoxContainer/RemoveTag" to="." method="_on_remove_tag_pressed"]
+[connection signal="pressed" from="HBoxContainer/AddTag" to="." method="_on_add_tag_pressed"]

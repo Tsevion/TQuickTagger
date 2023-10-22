@@ -1,0 +1,139 @@
+[gd_scene load_steps=8 format=3 uid="uid://dmxaww2idfdck"]
+
+[ext_resource type="Script" path="res://image_button.gd" id="1_1381b"]
+[ext_resource type="Texture2D" uid="uid://d2uaetwhuym3k" path="res://icon.svg" id="2_juw4q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8825y"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.47451, 0.47451, 0.47451, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+shadow_size = 2
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w6plg"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.133333, 0.227451, 0.364706, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.47451, 0.47451, 0.47451, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+shadow_size = 2
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ir0hi"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.701961, 0.701961, 0.235294, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+shadow_size = 2
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iwv7l"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.135239, 0.228144, 0.364201, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.701961, 0.701961, 0.235294, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+shadow_size = 2
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="LabelSettings" id="LabelSettings_cco1p"]
+font_size = 12
+
+[node name="Control" type="PanelContainer"]
+custom_minimum_size = Vector2(200, 200)
+offset_right = 200.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8825y")
+script = ExtResource("1_1381b")
+base_style = SubResource("StyleBoxFlat_8825y")
+selected_style = SubResource("StyleBoxFlat_w6plg")
+focused_style = SubResource("StyleBoxFlat_ir0hi")
+focused_selected_style = SubResource("StyleBoxFlat_iwv7l")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+texture_filter = 4
+texture_repeat = 1
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("2_juw4q")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Selected" type="CheckBox" parent="VBoxContainer/TextureRect"]
+layout_mode = 1
+offset_right = 24.0
+offset_bottom = 24.0
+scale = Vector2(1.2, 1.2)
+focus_mode = 0
+
+[node name="FileName" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "file_name.gif"
+label_settings = SubResource("LabelSettings_cco1p")
+horizontal_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_focus_exited"]
+[connection signal="toggled" from="VBoxContainer/TextureRect/Selected" to="." method="_on_selected_toggled"]
